@@ -1,0 +1,87 @@
+{% include 'base.html' %}
+
+{% block content %}
+<!-- Tasks -->
+<section
+      class="flex flex-1 flex-wrap justify-center gap-3 bg-[#fff0] w-10/12 md:w-11/12 h-full mb-3 rounded-2xl p-3 overflow-y-auto scrollbar-hide"
+    >
+      <!-- Task card -->
+      <div class="w-full md:w-4/6 flex flex-col bg-white h-fit rounded-xl p-3">
+        <!-- Top -->
+        <div class="flex flex-row justify-between">
+          <!-- Left: Title and Description -->
+          <div>
+            <h1 class="text-green-500 font-semibold text-xl">
+              {{ task.title}}
+            </h1>
+            <br />
+            <h2 class="text-blue-500 font-bold">
+              Status:
+              {% if task.completed %}
+              <span class="font-medium text-green-400"
+                >Completed <i class="bx bxs-badge-check"></i>
+              </span>
+
+              {% elif task.work %}
+              <span class="font-medium text-orange-400"
+                >In processing <i class="bx bxs-hot"></i>
+              </span>
+
+              {% else %}
+              <span class="font-medium text-red-400"
+                >Not Completed <i class="bx bxs-sad"></i>
+              </span>
+
+              {% endif %}
+            </h2>
+            <h2 class="text-gray-500 font-bold italic underline mt-3">
+              Description
+            </h2>
+            <p class="text-gray-500 text-md">
+              {{task.description}}
+            </p>
+            <h2 class="text-gray-500 font-bold italic underline mt-3">
+             Implementer
+            </h2>
+            {% if owner %}
+            <p class="text-gray-500 text-md">Эта задача принадлежит: <strong>{{ owner.username }}</strong></p>
+            {% else %}
+            <p class="text-gray-500 text-md">Владелец задачи неизвестен</p>
+            {% endif %}
+          </div>
+          <!-- Right: Toggle complete mode -->
+          <a href="{% url 'toggle_complete' task.id %}">
+            {% if task.completed %}
+            <i class="bx bxs-check-circle bx-sm text-green-500"></i>
+            {% elif task.work %}
+            <i class="bx bx-check-circle bx-sm text-blue-500"></i>
+            {% else %}
+            <i class="bx bx-analyse bx-sm text-blue-500"></i>
+            <!-- <i class='bx bxs-check-circle'></i> -->
+            {%endif%}
+          </a>
+        </div>
+        <!-- Line -->
+        <hr class="border-t border-gray-200 my-2" />
+        <!-- Bottom: Time and Date | Delete -->
+        <div class="flex flex-row justify-between">
+          <h2 class="text-gray-500 font-bold">
+            Due {{task.due_date}} <span class="font-medium text-gray-400">{{task.due_time}}</span>
+          </h2>
+          <a
+            href="{% url 'home' %}"
+            class="py-1 px-2 bg-blue-600 rounded-xl flex items-center gap-1 text-white font-semibold"
+            ><i class="bx bxs-left-arrow-circle"></i> Go Home</a
+          >
+          <a
+            href="{{ request.META.HTTP_REFERER }}"
+            class="py-1 px-2 bg-blue-600 rounded-xl flex items-center gap-1 text-white font-semibold"
+            ><i class="bx bxs-left-arrow-circle"></i> Go Back</a
+          >
+          <a href="{% url 'delete' task.id %}">
+            <i class="bx bxs-trash bx-sm text-red-500"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+{% endblock content %}
